@@ -1,3 +1,5 @@
+#include <Arduino.h>
+
 const int motorLeftForwardPin = 8; //Motor A - Ain1
 const int motorLeftBackPin = 9; //Motor A - Ain2
 const int motorRightForwardPin = 11; //Motor B - Bin1
@@ -13,7 +15,7 @@ const int motorRightBackPin = 10; //Motor B - Bin2
 volatile unsigned long LeftCount = 0;
 volatile unsigned long RightCount = 0;
 
-EnableInterrupts()
+
 
 void setup() {
   
@@ -32,8 +34,8 @@ void setup() {
 
 //INTERRUPTS
 
-attachInterrupt(digitalPinToInterrupt(0), leftEncoderEvent, CHANGE);
-attachInterrupt(digitalPinToInterrupt(1), rightEncoderEvent, CHANGE);
+attachInterrupt(digitalPinToInterrupt(0), &leftEncoderEvent, CHANGE);
+attachInterrupt(digitalPinToInterrupt(1), &rightEncoderEvent, CHANGE);
 
 Serial.begin(9600); //Opens serial port and sets data range to 9600 bps
 
