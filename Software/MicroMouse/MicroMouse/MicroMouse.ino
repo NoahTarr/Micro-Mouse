@@ -16,6 +16,9 @@
 //      1   |       0   |       H   |       L   |   Forward
 //      1   |       1   |       L   |       L   |   Brake/Slow Decay
 
+//PWM means use analogWrite(...).
+//0\1 means use digitalWrite(...) either LOW\HIGH respectively.
+//Only certain pins support PWM so make sure the motors are connected to pins that support it.
 //Motor Controller (drv8833): PWM Control of Motor Speed
 //  xIN1    |   xIN2    |   FUNCTION
 //   PWM    |      0    |   Forward PWM, fast decay
