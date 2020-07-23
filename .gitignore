@@ -343,3 +343,4 @@ healthchecksdb
 *.vcxproj
 *.filters
 /Software/MicroMouse/MicroMouse.sln
+/Recipts
