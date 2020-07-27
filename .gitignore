@@ -338,9 +338,13 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+
 /Notes/
 /Software/MicroMouse/MicroMouse/__vm
 *.vcxproj
 *.filters
 /Software/MicroMouse/MicroMouse.sln
 /Recipts/
+.gitignore.txt
+.git_commit_template.txt

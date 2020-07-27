@@ -1,0 +1,19 @@
+########50 characters max########################
+# Subject
+
+########72 characters max##############################################
+# Problem, Task, Reason for Commit
+Problem:
+
+
+# Solution or List of Changes
+Solution:
+
+
+# Special instructions, testing steps, etc or N/A
+Note: 
+
+
+# References to websites, articles, videos, etc or N/A
+References:
+

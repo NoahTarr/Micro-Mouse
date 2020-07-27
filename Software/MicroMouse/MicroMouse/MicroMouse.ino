@@ -9,23 +9,6 @@
 #include "motor.h"
 #include "encoder.h"
 
-//Motor Controller (drv8833): H-Bridge Logic
-//  xIN1    |   xIN2    |   xOUT1   |   xOUT2   |   FUNCTION
-//      0   |       0   |       Z   |       Z   |   Coast/Fast Decay
-//      0   |       1   |       L   |       H   |   Reverse
-//      1   |       0   |       H   |       L   |   Forward
-//      1   |       1   |       L   |       L   |   Brake/Slow Decay
-
-//PWM means use analogWrite(...).
-//0\1 means use digitalWrite(...) either LOW\HIGH respectively.
-//Only certain pins support PWM so make sure the motors are connected to pins that support it.
-//Motor Controller (drv8833): PWM Control of Motor Speed
-//  xIN1    |   xIN2    |   FUNCTION
-//   PWM    |      0    |   Forward PWM, fast decay
-//     1    |    PWM    |   Forward PWM, slow decay
-//     0    |    PWM    |   Reverse PWM, fast decay
-//   PWM    |      !    |   Reverse PWM, slow decay
-
 //pins for motors
 #define LH_MOTOR_A 6 //PWM of 980Hz
 #define LH_MOTOR_B 9 //PWM of 490Hz
@@ -33,7 +16,7 @@
 #define RH_MOTOR_B 10 //PWM of 490Hz
 
 //pins for encoder inputs
-#define LH_ENCODER_A 3
+#define LH_ENCODER_A 3 
 #define LH_ENCODER_B 7
 #define RH_ENCODER_A 2
 #define RH_ENCODER_B 4
@@ -51,8 +34,8 @@
 #define pidMin -255
 
 
-// motor LH_MOTOR(LH_MOTOR_A, LH_MOTOR_B);
-// motor RH_MOTOR(RH_MOTOR_A, RH_MOTOR_B);
+motor LH_MOTOR(LH_MOTOR_A, LH_MOTOR_B);
+motor RH_MOTOR(RH_MOTOR_A, RH_MOTOR_B);
 encoder LH_ENCODER(LH_ENCODER_A, LH_ENCODER_B);
 encoder RH_ENCODER(RH_ENCODER_A, RH_ENCODER_B);
 PIDController MOTOR_POS_PID;
@@ -60,11 +43,6 @@ PIDController MOTOR_POS_PID;
 // the setup function runs once when you press reset or power the board
 void setup() {
     Serial.begin(9600); //Opens serial port and sets data range to 9600 bps
-
-    pinMode(LH_MOTOR_A, OUTPUT);
-    pinMode(LH_MOTOR_B, OUTPUT);
-    pinMode(RH_MOTOR_A, OUTPUT);
-    pinMode(RH_MOTOR_B, OUTPUT);
 
     MOTOR_POS_PID.begin();
     MOTOR_POS_PID.tune(Kp, Ki, Kd); 
@@ -81,38 +59,35 @@ void loop() {
     Serial.println();
     delay(1000);
 
-    analogWrite(RH_MOTOR_A, 255);
-    digitalWrite(RH_MOTOR_B, LOW);
+    LH_MOTOR.driveClockwise(255);
+    RH_MOTOR.driveClockwise(255);
     delay(1000);
 
-    analogWrite(RH_MOTOR_A, 50);
-    digitalWrite(RH_MOTOR_B, LOW);
+    LH_MOTOR.driveClockwise(100);
+    RH_MOTOR.driveClockwise(100);
     delay(1000);
 
-    digitalWrite(RH_MOTOR_B, HIGH);
+    LH_MOTOR.driveCounterClockwise(100);
+    RH_MOTOR.driveCounterClockwise(100);
     delay(1000);
 
-    // LH_MOTOR.setPower(fixedPower, 0);
-    // RH_MOTOR.setPower(fixedPower, 0);
-    // delay(1000);
-    //
-    // LH_MOTOR.setPower(maxPower, maxPower);
-    // RH_MOTOR.setPower(maxPower, maxPower);
-    // delay(1000);
-    //
-    // LH_MOTOR.setPower(0, fixedPower);
-    // RH_MOTOR.setPower(0, fixedPower);
-    // delay(1000);
-    //
-    // LH_MOTOR.setPower(maxPower, maxPower);
-    // RH_MOTOR.setPower(maxPower, maxPower);
-    // delay(1000);
-    //
-    // LH_MOTOR.setPower(0, fixedPower);
-    // RH_MOTOR.setPower(fixedPower, 0);
-    // delay(1000);
-    //
-    // LH_MOTOR.setPower(maxPower, maxPower);
-    // RH_MOTOR.setPower(maxPower, maxPower);
-    // delay(1000);
+    LH_MOTOR.driveCounterClockwise(255);
+    RH_MOTOR.driveCounterClockwise(255);
+    delay(1000);
+
+    LH_MOTOR.stop();
+    RH_MOTOR.stop();
+    delay(1000);
+
+    LH_MOTOR.driveClockwise(255);
+    RH_MOTOR.driveCounterClockwise(255);
+    delay(1000);
+
+    LH_MOTOR.coast();
+    RH_MOTOR.coast();
+    delay(1000);
+
+    LH_MOTOR.resume();
+    RH_MOTOR.resume();
+    delay(1000);
 }
