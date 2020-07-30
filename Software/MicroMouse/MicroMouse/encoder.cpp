@@ -1,6 +1,13 @@
-// 
-// 
-// 
+//
+// Our encoder: https://www.pololu.com/product/4760
+// Our encoder disk: https://www.pololu.com/product/2599
+// 12 Counts per Revolution of Motor Shaft (CRP_MS)
+// CPR of Output Shaft (CPR_OS) = Motor Gear Ratio * CPM_MS
+// CPR_OS = 75 * 12 = 900 CPR
+//
+// This position of the axle is altered based on RISING pulse of encoder pinA.
+// The CPR counts 4 times each cycle/period.
+// So 1 full rotation will occur at CPR/4 or 225 counts/rotation.
 
 #include "encoder.h"
 
@@ -54,10 +61,5 @@ void encoder::glueFunction1()
 
 
 void encoder::encoderEvent() {
-    if (digitalRead(pinB_) == LOW) { //Encoder moving Clockwise
-        position_++;
-    }
-    else { //Encoder moving Counter Clockwise
-        position_--;
-    }
+    digitalRead(pinB_) == LOW ? ++position_ : --position_;
 }

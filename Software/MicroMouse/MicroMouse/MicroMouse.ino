@@ -50,44 +50,32 @@ void setup() {
 }
 
 // the loop function runs over and over again until power down or reset
+int count = 0;
 void loop() {
     //Encoder looping code
-    Serial.print("Left Count: ");
-    Serial.println(LH_ENCODER.getPosition());
-    Serial.print("Right Count: ");
-    Serial.println(RH_ENCODER.getPosition());
-    Serial.println();
-    delay(1000);
-
+    // Serial.print("Left Count: ");
+    // Serial.println(LH_ENCODER.getPosition());
+    // Serial.print("Right Count: ");
+    // Serial.println(RH_ENCODER.getPosition());
+    // Serial.println();
+    // delay(1000);
+    // RH_MOTOR.stop();
+    // delay(10);
+    // if (count < 3)
+    // {
+    //     RH_MOTOR.driveClockwise(225);
+    //     delay(1000);
+    //     RH_ENCODER.setPosition(0);
+    //     delay(1000);
+    //     RH_MOTOR.stop();
+    //     delay(100);
+    //     Serial.print("Counts/Sec: ");
+    //     Serial.println(RH_ENCODER.getPosition());
+    //     Serial.print("Revolutions/Sec: ");
+    //     Serial.println(static_cast<double>(RH_ENCODER.getPosition())/225);
+    //     count++;
+    // }
     LH_MOTOR.driveClockwise(255);
     RH_MOTOR.driveClockwise(255);
-    delay(1000);
-
-    LH_MOTOR.driveClockwise(100);
-    RH_MOTOR.driveClockwise(100);
-    delay(1000);
-
-    LH_MOTOR.driveCounterClockwise(100);
-    RH_MOTOR.driveCounterClockwise(100);
-    delay(1000);
-
-    LH_MOTOR.driveCounterClockwise(255);
-    RH_MOTOR.driveCounterClockwise(255);
-    delay(1000);
-
-    LH_MOTOR.stop();
-    RH_MOTOR.stop();
-    delay(1000);
-
-    LH_MOTOR.driveClockwise(255);
-    RH_MOTOR.driveCounterClockwise(255);
-    delay(1000);
-
-    LH_MOTOR.coast();
-    RH_MOTOR.coast();
-    delay(1000);
-
-    LH_MOTOR.resume();
-    RH_MOTOR.resume();
-    delay(1000);
 }
+
