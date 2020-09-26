@@ -1,4 +1,4 @@
-//
+
 // Our encoder: https://www.pololu.com/product/4760
 // Our encoder disk: https://www.pololu.com/product/2599
 // 12 Counts per Revolution of Motor Shaft (CRP_MS)

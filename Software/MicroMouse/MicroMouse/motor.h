@@ -4,6 +4,7 @@
 #define _MOTOR_h
 
 #include <Arduino.h>
+#include <Encoder.h>
 
 
 //Motor Controller (drv8833): H-Bridge Logic
@@ -29,18 +30,20 @@ class motor
 public:
     motor(int pinA, int pinB);
     int getDutyCycle() const; // Returns previous duty cycle: 0 to 255
-    bool isMovingClockwise() const;
-    void driveClockwise(int dutyCycle);
-    void driveCounterClockwise(int dutyCycle);
+    void driveDutyCycle(int dutyCycle);
+    void turnLeftDeg(int degress, int power);
+    void turnRightDeg(int degress, int power);
+    double getSpeed(Encoder enc);
     void coast(); //Cuts all voltage to the motor
     void stop(); //Locks the motor in place
-    void resume(); //Resumes the previous duty cycle and direction
 
 private:
     int pinA_;
     int pinB_;
     int dutyCycle_;
-    bool movingClockwise_;
+    double lastTime_;
+    int lastCount_;
+    int crntCount_; 
 };
 
 

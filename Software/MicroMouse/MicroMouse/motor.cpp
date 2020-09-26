@@ -22,11 +22,18 @@
 motor::motor(int pinA, int pinB)
 {
     dutyCycle_ = 0;
-    movingClockwise_ = true; //Assuming first direction is forward
-    this->pinA_ = pinA;
-    this->pinB_ = pinB;
-    pinMode(pinA, OUTPUT);
-    pinMode(pinB, OUTPUT);
+    pinA_ = pinA;
+    pinB_ = pinB;
+    lastCount_ = 0;
+    crntCount_ = 0;
+    lastTime_ = 0;
+
+    //Initialize motor control pins
+    pinMode(pinA_, OUTPUT);
+    pinMode(pinB_, OUTPUT);
+
+    //Start with motor breaking
+    stop();
 }
 
 int motor::getDutyCycle() const
@@ -34,25 +41,46 @@ int motor::getDutyCycle() const
     return dutyCycle_;
 }
 
-bool motor::isMovingClockwise() const
-{
-    return movingClockwise_;
-}
-
-void motor::driveClockwise(int dutyCycle)
+void motor::driveDutyCycle(int dutyCycle)
 {
     dutyCycle_ = dutyCycle;
-    movingClockwise_ = true;
-    analogWrite(pinA_, dutyCycle);
-    digitalWrite(pinB_, LOW);
+
+    if (dutyCycle_ > 255)
+        dutyCycle_ = 255;
+    else if (dutyCycle_ < -255)
+        dutyCycle_ = -255;
+
+    if (dutyCycle_ > 0)
+    {
+        analogWrite(pinA_, dutyCycle_);
+        digitalWrite(pinB_, LOW);
+    }
+    else if (dutyCycle_ < 0)
+    {
+        analogWrite(pinB_, -1 * dutyCycle_);
+        digitalWrite(pinA_, LOW);
+    }
+    else //Break
+    {
+        digitalWrite(pinA_, HIGH);
+        digitalWrite(pinB_, HIGH);
+    }
 }
 
-void motor::driveCounterClockwise(int dutyCycle)
-{
-    dutyCycle_ = dutyCycle;
-    movingClockwise_ = false;
-    digitalWrite(pinA_, LOW);
-    analogWrite(pinB_, dutyCycle);
+//Get speed in RPM's
+double motor::getSpeed(Encoder enc) {
+    lastCount_ = crntCount_;
+    crntCount_ = enc.read();
+    const double deltaCount = crntCount_ - lastCount_;
+    const double crntTime = millis();
+    const double deltaTime = crntTime - lastTime_;
+    lastTime_ = crntTime;
+
+    //speedInnerShaft RPM = (change counts)/(change time) * (1 Rotation)/(12 counts) * (60000 ms)/(1 min)
+    //speedOutShaft RPM = (speedInnerShaft RPM)/(75 gear ration)
+    // return pow(2.71828, (((deltaCount * 60000) / (deltaTime * 900)) + 167) / 111);
+    // return (((deltaCount * 60000) / (deltaTime * 900)) - 350) / 0.3;
+    return (deltaCount * 60000) / (deltaTime * 900);
 }
 
 void motor::coast()
@@ -63,20 +91,6 @@ void motor::coast()
 
 void motor::stop()
 {
-    analogWrite(pinA_, HIGH);
-    analogWrite(pinB_, HIGH);
-}
-
-void motor::resume()
-{
-    if (movingClockwise_)
-    {
-        analogWrite(pinA_, dutyCycle_);
-        digitalWrite(pinB_, LOW);
-    }
-    else
-    {
-        digitalWrite(pinA_, LOW);
-        analogWrite(pinB_, dutyCycle_);
-    }
+    digitalWrite(pinA_, HIGH);
+    digitalWrite(pinB_, HIGH);
 }
