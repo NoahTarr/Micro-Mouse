@@ -63,8 +63,8 @@ void motor::coast()
 
 void motor::stop()
 {
-    digitalWrite(pinA_, HIGH);
-    digitalWrite(pinB_, HIGH);
+    analogWrite(pinA_, HIGH);
+    analogWrite(pinB_, HIGH);
 }
 
 void motor::resume()

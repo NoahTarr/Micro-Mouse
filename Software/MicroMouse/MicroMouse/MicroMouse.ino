@@ -5,7 +5,7 @@
 */
 
 
-#include <PIDController.h>
+// #include <PIDController.h>
 #include "motor.h"
 #include "encoder.h"
 
@@ -34,30 +34,32 @@
 #define pidMin -255
 
 
+void turn360(int dutyCycle);
+
 motor LH_MOTOR(LH_MOTOR_A, LH_MOTOR_B);
 motor RH_MOTOR(RH_MOTOR_A, RH_MOTOR_B);
 encoder LH_ENCODER(LH_ENCODER_A, LH_ENCODER_B);
 encoder RH_ENCODER(RH_ENCODER_A, RH_ENCODER_B);
-PIDController MOTOR_POS_PID;
+// PIDController MOTOR_POS_PID;
 
 // the setup function runs once when you press reset or power the board
 void setup() {
     Serial.begin(9600); //Opens serial port and sets data range to 9600 bps
 
-    MOTOR_POS_PID.begin();
-    MOTOR_POS_PID.tune(Kp, Ki, Kd); 
-    MOTOR_POS_PID.limit(pidMin, pidMax);
+    // MOTOR_POS_PID.begin();
+    // MOTOR_POS_PID.tune(Kp, Ki, Kd); 
+    // MOTOR_POS_PID.limit(pidMin, pidMax);
 }
 
 // the loop function runs over and over again until power down or reset
 int count = 0;
 void loop() {
     //Encoder looping code
-    // Serial.print("Left Count: ");
-    // Serial.println(LH_ENCODER.getPosition());
-    // Serial.print("Right Count: ");
-    // Serial.println(RH_ENCODER.getPosition());
-    // Serial.println();
+    Serial.print("Left Count: ");
+    Serial.println(LH_ENCODER.getPosition());
+    Serial.print("Right Count: ");
+    Serial.println(RH_ENCODER.getPosition());
+    Serial.println();
     // delay(1000);
     // RH_MOTOR.stop();
     // delay(10);
@@ -75,7 +77,16 @@ void loop() {
     //     Serial.println(static_cast<double>(RH_ENCODER.getPosition())/225);
     //     count++;
     // }
-    LH_MOTOR.driveClockwise(255);
-    RH_MOTOR.driveClockwise(255);
+//    LH_MOTOR.driveClockwise(255);
+//    RH_MOTOR.driveClockwise(255);
+    turn360(255);
 }
 
+void turn360(int dutyCycle) {
+    while (LH_ENCODER.getPosition() < 349) {
+        LH_MOTOR.driveClockwise(dutyCycle);
+        RH_MOTOR.driveCounterClockwise(dutyCycle);
+    }
+    LH_MOTOR.stop();
+    RH_MOTOR.stop();
+}
