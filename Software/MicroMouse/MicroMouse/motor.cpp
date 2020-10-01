@@ -67,6 +67,34 @@ void motor::driveDutyCycle(int dutyCycle)
     }
 }
 
+void motor::driveSpeed(int speed)
+{
+    if (speed == 0)
+    {
+        driveDutyCycle(0);
+    }
+    else if (speed >  0 && speed < 300)
+    {
+        driveDutyCycle(50);
+    }
+    else if (speed > 300 && speed < 350)
+    {
+        driveDutyCycle(100);
+    }
+    else if (speed > 350 && speed < 380)
+    {
+        driveDutyCycle(150);
+    }
+    else if (speed > 380 && speed < 400)
+    {
+        driveDutyCycle(200);
+    }
+    else
+    {
+        driveDutyCycle(255);
+    }
+}
+
 //Get speed in RPM's
 double motor::getSpeed(Encoder enc) {
     lastCount_ = crntCount_;
@@ -81,6 +109,8 @@ double motor::getSpeed(Encoder enc) {
     // return pow(2.71828, (((deltaCount * 60000) / (deltaTime * 900)) + 167) / 111);
     // return (((deltaCount * 60000) / (deltaTime * 900)) - 350) / 0.3;
     return (deltaCount * 60000) / (deltaTime * 900);
+    
+    // return (3.7033 * ((deltaCount * 60000) / (deltaTime * 900)) - 1349.9);
 }
 
 void motor::coast()

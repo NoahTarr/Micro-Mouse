@@ -31,8 +31,7 @@ public:
     motor(int pinA, int pinB);
     int getDutyCycle() const; // Returns previous duty cycle: 0 to 255
     void driveDutyCycle(int dutyCycle);
-    void turnLeftDeg(int degress, int power);
-    void turnRightDeg(int degress, int power);
+    void driveSpeed(int speed);
     double getSpeed(Encoder enc);
     void coast(); //Cuts all voltage to the motor
     void stop(); //Locks the motor in place
