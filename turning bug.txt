@@ -1,0 +1,23 @@
+1:
+Left Count: -120
+Right Count: 493
+
+2:
+Left Count: 1139
+Right Count: -420
+
+3: R:CW L:CCW
+Left Count: 491
+Right Count: -121
+
+4: L:CCW R:CW
+Left Count: 481
+Right Count: -114
+
+5: LCCW R:CCW
+Left Count: 516
+Right Count: 520
+
+6: L:CW R:CW
+Left Count: -442
+Right Count: -381
