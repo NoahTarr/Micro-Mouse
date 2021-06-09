@@ -23,7 +23,10 @@
 #define dutyMax 255
 #define dutyMin -255
 #define stepTime 500
-#define Kp 0.1
+// #define Kp 0.4000
+// #define Ki 0.6380
+// #define Kd 0.2508
+#define Kp 0.15
 #define Ki 0.6
 #define Kd 0.85
 double LM_setSpeed, RM_setSpeed, LM_CrntSpeed, RM_CrntSpeed, LM_adjDuty, RM_adjDuty;
@@ -59,9 +62,6 @@ double LM_setSpeed, RM_setSpeed, LM_CrntSpeed, RM_CrntSpeed, LM_adjDuty, RM_adjD
 #define ticksFor90Turn 369 //Should be 369
 
 
-UltraSonicDistanceSensor LH_DSENSOR(TRIG, LH_ECHO);
-UltraSonicDistanceSensor F_DSENSOR(TRIG, F_ECHO);
-UltraSonicDistanceSensor RH_DSENSOR(TRIG, RH_ECHO);
 motor LH_MOTOR(LH_MOTOR_A1, LH_MOTOR_A2);
 motor RH_MOTOR(RH_MOTOR_B1, RH_MOTOR_B2);
 AutoPID LH_MOTOR_PID(&LM_CrntSpeed, &LM_setSpeed, &LM_adjDuty, dutyMin, dutyMax, Kp, Ki, Kd);
@@ -70,74 +70,152 @@ Encoder LH_ENCODER(LH_ENCODER_A, LH_ENCODER_B);
 Encoder RH_ENCODER(RH_ENCODER_A, RH_ENCODER_B);
 
 
-// void turnLeftDeg(int degrees, int power);
 void turnDeg(int degrees, int power);
 
 
 // the setup function runs once when you press reset or power the board
+// the loop function runs over and over again until power down or reset
+int count = 0;
+int speed = 0;
+int done;
+int lastTime;
 void setup() {
     Serial.begin(9600); //Opens serial port and sets data range to 9600 
 
     LH_MOTOR_PID.setTimeStep(stepTime);
     RH_MOTOR_PID.setTimeStep(stepTime);
+	
+	LM_setSpeed = RM_setSpeed = 0;
+	done = false;
+	lastTime = millis();
 }
 
 
-// the loop function runs over and over again until power down or reset
-int count = 0;
-int count2 = 0;
-int speed = 0;
-int done = false;
 void loop()
 {
-    // Every 500 miliseconds, do a measurement using the sensor and print the distance in centimeters.
-    // Serial.print("Left: ");
-    // Serial.println(LH_DSENSOR.measureDistanceCm());
-    // Serial.print("Front: ");
-    // Serial.println(F_DSENSOR.measureDistanceCm());
-    // Serial.print("Right: ");
-    // Serial.println(RH_DSENSOR.measureDistanceCm());
-    // delay(500);
-    //
-    // Serial.print(LH_ENCODER.read());
-    // Serial.print(", ");
-    // Serial.println(RH_ENCODER.read());
-    //
-    // while (LH_ENCODER.read() < ticksFor90Turn || RH_ENCODER.read() > -ticksFor90Turn)
-    // {
-    //     if (LH_ENCODER.read() > ticksFor90Turn) {LH_MOTOR.stop();}
-    //     if (RH_ENCODER.read() < -ticksFor90Turn) {RH_MOTOR.stop();}
-    // }
-    //
-    // LH_MOTOR.stop();
-    // RH_MOTOR.stop();
 
-    // Serial.println(F_DSENSOR.measureDistanceCm());
-    // Serial.println(LH_ENCODER.read());
-    // Serial.println(RH_ENCODER.read());
-    // Serial.println("------------------");
-    // if (F_DSENSOR.measureDistanceCm() > 20)
-    // {
-    //     LH_MOTOR.driveDutyCycle(100);
-    //     RH_MOTOR.driveDutyCycle(100);
-    // }
-    // else
-    // {
-    //     turnDeg(90, 100);
-    //     delay(1000);
-    // }
-    // delay(100);
+	switch (count)
+	{
+		case 0: 
+	        LM_setSpeed = 0;
+			RM_setSpeed = 0;
+			if (millis() - lastTime >= 3000)
+            {
+				count++;
+				lastTime = millis();
+				Serial.println("=================================");
+				Serial.println(millis() - lastTime);
+				Serial.println("=================================");
+			}
+		break;
+	    case 1:
+	        LM_setSpeed = -100;
+			RM_setSpeed = -100;
+			if (millis() - lastTime >= 7111)
+            {
+				count++;
+				lastTime = millis();
+				Serial.println("=================================");
+				Serial.println(millis() - lastTime);
+				Serial.println("=================================");
+			}
+		break;
+		case 2:
+			LM_setSpeed = -100;
+			RM_setSpeed = 100;
+			if (millis() - lastTime >= 3422)
+            {
+				count++;
+				lastTime = millis();
+				Serial.println("=================================");
+				Serial.println(millis() - lastTime);
+				Serial.println("=================================");
+			}
+		break;
+		case 3:
+			LM_setSpeed = 0;
+			RM_setSpeed = 0;
+			if (millis() - lastTime >= 2000)
+            {
+				count++;
+				lastTime = millis();
+				Serial.println("=================================");
+				Serial.println(millis() - lastTime);
+				Serial.println("=================================");
+			}
+		break;
+		case 4:
+			LM_setSpeed = 100;
+			RM_setSpeed = -100;
+			if (millis() - lastTime >= 1500)
+            {
+				count++;
+				lastTime = millis();
+				Serial.println("=================================");
+				Serial.println(millis() - lastTime);
+				Serial.println("=================================");
+			}
+		break;
+		case 5:
+			LM_setSpeed = 150;
+			RM_setSpeed = 150;
+			if (millis() - lastTime >= 4000)
+            {
+				count++;
+				lastTime = millis();
+				Serial.println("=================================");
+				Serial.println(millis() - lastTime);
+				Serial.println("=================================");
+			}
+		break;
+		case 6:
+			LM_setSpeed = 200;
+			RM_setSpeed = 200;
+			if (millis() - lastTime >= 4000)
+			{
+				count++;
+				lastTime = millis();
+				Serial.println("=================================");
+				Serial.println(millis() - lastTime);
+				Serial.println("=================================");
+			}
+			break;
+		default:
+			while(1)
+			{
+				LM_setSpeed = 0;
+				RM_setSpeed = 0;
 
-    LM_setSpeed = RM_setSpeed = 0;
+				LM_CrntSpeed = LH_MOTOR.getSpeed(LH_ENCODER);
+				RM_CrntSpeed = RH_MOTOR.getSpeed(RH_ENCODER);
 
-    LM_CrntSpeed = LH_MOTOR.getSpeed(LH_ENCODER);
-    RM_CrntSpeed = RH_MOTOR.getSpeed(RH_ENCODER);
+				LH_MOTOR_PID.run();
+				RH_MOTOR_PID.run();
 
-    LH_MOTOR_PID.run();
-    RH_MOTOR_PID.run();
+				LH_MOTOR.driveDutyCycle(LM_adjDuty);
+				RH_MOTOR.driveDutyCycle(RM_adjDuty);
+			}
+	}
 
-    LH_MOTOR.driveDutyCycle(LM_adjDuty);
-    RH_MOTOR.driveDutyCycle(RM_adjDuty);
+	LM_CrntSpeed = LH_MOTOR.getSpeed(LH_ENCODER);
+	RM_CrntSpeed = RH_MOTOR.getSpeed(RH_ENCODER);
+
+	LH_MOTOR_PID.run();
+	RH_MOTOR_PID.run();
+
+	LH_MOTOR.driveDutyCycle(LM_adjDuty);
+	RH_MOTOR.driveDutyCycle(RM_adjDuty);
+
+	Serial.println("=================================");
+	Serial.println("Left Motor");
+	Serial.println(LM_setSpeed);
+	Serial.println(LM_CrntSpeed);
+	Serial.println(LM_adjDuty);
+	Serial.println("Right Motor");
+	Serial.println(RM_setSpeed);
+	Serial.println(RM_CrntSpeed);
+	Serial.println(RM_adjDuty);
+	Serial.println("=================================");
 }
 
 
